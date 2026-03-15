@@ -660,5 +660,23 @@ module or1420SingleCore ( input wire         clock12MHz,
                              s_flashDataValid | s_camDataValid;
  assign s_busy             = s_sdramBusy;
  assign s_burstSize        = s_cpu1BurstSize | s_hdmiBurstSize | s_camBurstSize;
- 
+
+/* Here we define the counter custom instruction*/
+
+profcounters #(
+  .customId(8'h0B)
+) u_profcounters (
+  .start   (s_cpu1CiStart),
+  .clock   (s_systemClock),
+  .reset   (s_cpuReset),
+  .stall   (s_stall),
+  .busIdle (s_busIdle),
+  .valueA  (s_cpu1CiDataA),
+  .valueB  (s_cpu1CiDataB),
+  .ciN     (s_cpu1CiN),
+  .done    (s_countCidone),
+  .result  (s_countResult)
+);
+
+
 endmodule
