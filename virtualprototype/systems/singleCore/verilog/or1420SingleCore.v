@@ -49,7 +49,7 @@ module or1420SingleCore ( input wire         clock12MHz,
 
   wire        s_busIdle, s_snoopableBurst;
   wire        s_hdmiDone, s_systemClock, s_systemClockX2, s_swapByteDone, s_flashDone, s_cpuFreqDone;
-  wire [31:0] s_hdmiResult, s_swapByteResult, s_flashResult, s_cpuFreqResult;
+  wire [31:0] s_hdmiResult, s_swapByteResult, s_flashResult, s_cpuFreqResult, s_countResult;
   wire [5:0]  s_memoryDistance = 6'd0;
   wire        s_busError, s_beginTransaction, s_endTransaction;
   wire [31:0] s_addressData;
@@ -322,7 +322,7 @@ module or1420SingleCore ( input wire         clock12MHz,
   wire [31:0] s_cpu1CiResult;
   wire [31:0] s_cpu1CiDataA, s_cpu1CiDataB, s_camCiResult, s_delayResult;
   wire [7:0]  s_cpu1CiN;
-  wire        s_cpu1CiRa, s_cpu1CiRb, s_cpu1CiRc, s_cpu1CiStart, s_cpu1CiCke, s_cpu1CiDone, s_i2cCiDone, s_delayCiDone;
+  wire        s_cpu1CiRa, s_cpu1CiRb, s_cpu1CiRc, s_cpu1CiStart, s_cpu1CiCke, s_cpu1CiDone, s_i2cCiDone, s_delayCiDone, s_countCidone;
   wire [4:0]  s_cpu1CiA, s_cpu1CiB, s_cpu1CiC;
   wire        s_cpu1IcacheRequestBus, s_cpu1DcacheRequestBus, s_camCiDone;
   wire        s_cpu1IcacheBusAccessGranted, s_cpu1DcacheBusAccessGranted;
@@ -332,9 +332,9 @@ module or1420SingleCore ( input wire         clock12MHz,
   wire        s_cpu1DataValid;
   wire [7:0]  s_cpu1BurstSize;
   wire        s_spm1Irq, s_stall;
-  
-  assign s_cpu1CiDone = s_hdmiDone | s_swapByteDone | s_flashDone | s_cpuFreqDone | s_i2cCiDone | s_delayCiDone | s_camCiDone;
-  assign s_cpu1CiResult = s_hdmiResult | s_swapByteResult | s_flashResult | s_cpuFreqResult | s_i2cCiResult | s_camCiResult | s_delayResult; 
+
+  assign s_cpu1CiDone = s_hdmiDone | s_swapByteDone | s_flashDone | s_cpuFreqDone | s_i2cCiDone | s_delayCiDone | s_camCiDone | s_countCidone;
+  assign s_cpu1CiResult = s_hdmiResult | s_swapByteResult | s_flashResult | s_cpuFreqResult | s_i2cCiResult | s_camCiResult | s_delayResult | s_countResult; 
 
   or1420Top #( .NOP_INSTRUCTION(32'h1500FFFF)) cpu1
              (.cpuClock(s_systemClock),
@@ -664,18 +664,18 @@ module or1420SingleCore ( input wire         clock12MHz,
 /* Here we define the counter custom instruction*/
 
 profcounters #(
-  .customId(8'h0B)
+    .customId(8'h0B)
 ) u_profcounters (
-  .start   (s_cpu1CiStart),
-  .clock   (s_systemClock),
-  .reset   (s_cpuReset),
-  .stall   (s_stall),
-  .busIdle (s_busIdle),
-  .valueA  (s_cpu1CiDataA),
-  .valueB  (s_cpu1CiDataB),
-  .ciN     (s_cpu1CiN),
-  .done    (s_countCidone),
-  .result  (s_countResult)
+    .start   (s_cpu1CiStart),
+    .clock   (s_systemClock),
+    .reset   (s_cpuReset),
+    .stall   (s_stall),
+    .busIdle (s_busIdle),
+    .valueA  (s_cpu1CiDataA),
+    .valueB  (s_cpu1CiDataB),
+    .ciN     (s_cpu1CiN),
+    .done    (s_countCidone),
+    .result  (s_countResult)
 );
 
 

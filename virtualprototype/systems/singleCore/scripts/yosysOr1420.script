@@ -50,11 +50,8 @@ read -sv ../../../modules/support/verilog/sram_512x32_dp.v
 read -sv ../../../modules/support/verilog/sram_512x32.v
 read -sv ../../../modules/support/verilog/sram_1024x16_dp.v
 read -sv ../../../modules/support/verilog/sram2048x8Dp.v
-
-# added module from PW
 read -sv ../verilog/counter.v
-read -sv ../verilog/profileCi.v
-
+read -sv ../verilog/cicounter.v
 read -sv ../verilog/or1420SingleCore.v
 synth_ecp5 -top or1420SingleCore -json or1420SingleCore.json
 
