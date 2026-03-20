@@ -71,7 +71,7 @@ int main () {
     // Print results
     printf("Execution cycles: %lu\n", cycles);
     printf("Stall cycles:     %lu\n", stall);
-    printf("Bus idle cycles:  %lu\n", idle);
+    printf("Bus idle cycles:  %lu\n\n", idle);
 
   }
 }
