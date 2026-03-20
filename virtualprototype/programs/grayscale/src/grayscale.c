@@ -27,6 +27,10 @@ int main () {
   uint32_t grayPixels;
   vga[2] = swap_u32(2);
   vga[3] = swap_u32((uint32_t) &grayscale[0]);
+
+  uint8_t img_counter   = 0;
+  uint8_t print_sampler = 10;
+  printf("\nPrint results every %d images.\n", print_sampler);
   while(1) {
 
     // Reset all counters first (valueB[11:8] = 1111)
@@ -40,6 +44,7 @@ int main () {
 
     uint32_t * gray = (uint32_t *) &grayscale[0];
     takeSingleImageBlocking((uint32_t) &rgb565[0]);
+    img_counter++;
 
     for (int line = 0; line < camParams.nrOfLinesPerImage; line++) {
       for (int pixel = 0; pixel < camParams.nrOfPixelsPerLine; pixel++) {
@@ -69,9 +74,13 @@ int main () {
     asm volatile ("l.nios_rrr %[out1], %[in1], r0, 0xB" : [out1] "=r" (idle) : [in1] "r" (counter_id));
 
     // Print results
-    printf("Execution cycles: %lu\n", cycles);
-    printf("Stall cycles:     %lu\n", stall);
-    printf("Bus idle cycles:  %lu\n\n", idle);
+    if (img_counter >= print_sampler) {
+        printf("Execution cycles: %lu\n", cycles);
+        printf("Stall cycles:     %lu\n", stall);
+        printf("Bus idle cycles:  %lu\n\n", idle);
+
+        img_counter = 0;
+    }
 
   }
 }
