@@ -679,4 +679,17 @@ profcounters #(
 );
 
 
+/*
+ * Here we define the RGB-565 to grayscsale conversion custom instruction
+*/
+rgb565GrayscaleIse #(
+    .CustomInstructionId(8'd0)
+) u_rgb565GrayscaleIse (
+    .start  (s_cpu1CiStart),
+    .valueA (s_cpu1CiDataA),
+    .iseId  (s_cpu1CiN),
+    .done   (s_cpu1CiDone),
+    .result (s_camCiResult)
+);
+
 endmodule
