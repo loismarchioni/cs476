@@ -19,7 +19,7 @@ module tb_rgb565GrayscaleIse;
     
     // DUT instanciation
     rgb565GrayscaleIse #(
-        .CustomInstructionId(8'd0)
+        .CustomInstructionId(8'd8)
     ) dut (
         .start  (start),
         .valueA (valueA),
@@ -73,7 +73,7 @@ module tb_rgb565GrayscaleIse;
 
         begin
             valueA = {16'b0, pixel};
-            iseId  = 8'd0;
+            iseId  = 8'd8;
             start  = 1'b1;
             #1;
 
@@ -128,7 +128,7 @@ module tb_rgb565GrayscaleIse;
 
         // test incorrect instruction id
         valueA = 32'h0000_FFFF;
-        iseId  = 8'd1;  // correct id is 8'd0
+        iseId  = 8'd1;  // correct id is 8'd8
         start  = 1;
         #1;
 
